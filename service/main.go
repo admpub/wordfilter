@@ -65,7 +65,6 @@ func toIndex(w http.ResponseWriter) {
 		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
 		"    <script>\n" +
 		"        function check(){\n" +
-		"            debugger;\n" +
 		"            var content = $(\"#content\").val();\n" +
 		"            $(\"#result\").show();\n" +
 		"            var resultMsg = $(\"#result-msg\");\n" +
