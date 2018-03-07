@@ -57,8 +57,7 @@ func apiHelper(w http.ResponseWriter) {
 }
 
 func toIndex(w http.ResponseWriter) {
-	fmt.Fprintf(w, "\n" +
-		"<!DOCTYPE html>\n" +
+	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
 		"\n" +
 		"<html>\n" +
 		"<head>\n" +
@@ -113,7 +112,7 @@ func toIndex(w http.ResponseWriter) {
 		"    <button onclick=\"check();\">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>\n" +
 		"</div>\n" +
 		"\n" +
-		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: block;\">\n" +
+		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: none;\">\n" +
 		"    <div style=\"margin:0px 0px 20px 0px;\">\n" +
 		"        <label style=\"\">检查结果：</label>\n" +
 		"    </div>\n" +
