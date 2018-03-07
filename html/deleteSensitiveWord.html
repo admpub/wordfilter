@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>添加敏感词</title>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        function del(){
+            var content = $("#content").val();
+            $.ajax({
+                url:"http://10.204.241.111:8088/v1/black_words",
+                dataType:"json",
+                type:"DELETE",
+                data:{"q":content},
+                success:function (r) {
+                    if(r && r.code=="1"){
+                        alert("删除成功！");
+                    }else if(r && r.code=="0"){
+                        alert(r.error);
+                    }else{
+                        alert("未知错误");
+                        console.log(r);
+                    }
+                },
+                error:function (e) {
+                    alert("未知错误");
+                    console.log(e);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+<div style="width: 900px; margin-top: 20px;">
+    <label style="width: 90px; display: inline-block;">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>
+    <textarea id="content" style="vertical-align: top;" rows="20" cols="100" placeholder="多个使用英文逗号隔开"></textarea>
+</div>
+
+<div style="width: 800px; text-align: center; margin-top: 30px;">
+    <button onclick="del();">删&nbsp;&nbsp;&nbsp;&nbsp;除</button>
+</div>
+
+</body>
+</html>

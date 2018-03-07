@@ -22,6 +22,10 @@ func (ro *router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		apiHelper(w)
 	case "/index.html": // 检查敏感词页面
 		toIndex(w)
+	case "/add.html": // 添加敏感词页面
+		toAdd(w)
+	case "/delete.html": // 删除敏感词页面
+		toDelete(w)
 	case "/v1/query": // 查找敏感词
 		queryWords(w, r)
 	case "/v1/black_words": // 敏感词
@@ -116,6 +120,104 @@ func toIndex(w http.ResponseWriter) {
 		"        <label style=\"\">检查结果：</label>\n" +
 		"    </div>\n" +
 		"    <div id=\"result-msg\" style=\"\"></div>\n" +
+		"</div>\n" +
+		"\n" +
+		"</body>\n" +
+		"</html>\n")
+}
+
+func toAdd(w http.ResponseWriter) {
+	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
+		"\n" +
+		"<html>\n" +
+		"<head>\n" +
+		"    <title>添加敏感词</title>\n" +
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
+		"    <script>\n" +
+		"        function add(){\n" +
+		"            var content = $(\"#content\").val();\n" +
+		"            $.ajax({\n" +
+		"                url:\"http://10.204.241.111:8088/v1/black_words\",\n" +
+		"                dataType:\"json\",\n" +
+		"                type:\"POST\",\n" +
+		"                data:{\"q\":content},\n" +
+		"                success:function (r) {\n" +
+		"                    if(r && r.code==\"1\"){\n" +
+		"                        alert(\"添加成功！\");\n" +
+		"                    }else if(r && r.code==\"0\"){\n" +
+		"                        alert(r.error);\n" +
+		"                    }else{\n" +
+		"                        alert(\"未知错误\");\n" +
+		"                        console.log(r);\n" +
+		"                    }\n" +
+		"                },\n" +
+		"                error:function (e) {\n" +
+		"                    alert(\"未知错误\");\n" +
+		"                    console.log(e);\n" +
+		"                }\n" +
+		"            });\n" +
+		"        }\n" +
+		"    </script>\n" +
+		"</head>\n" +
+		"\n" +
+		"<body>\n" +
+		"\n" +
+		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
+		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n" +
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n" +
+		"</div>\n" +
+		"\n" +
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
+		"    <button onclick=\"add();\">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>\n" +
+		"</div>\n" +
+		"\n" +
+		"</body>\n" +
+		"</html>\n")
+}
+
+func toDelete(w http.ResponseWriter) {
+	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
+		"\n" +
+		"<html>\n" +
+		"<head>\n" +
+		"    <title>添加敏感词</title>\n" +
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
+		"    <script>\n" +
+		"        function del(){\n" +
+		"            var content = $(\"#content\").val();\n" +
+		"            $.ajax({\n" +
+		"                url:\"http://10.204.241.111:8088/v1/black_words\",\n" +
+		"                dataType:\"json\",\n" +
+		"                type:\"DELETE\",\n" +
+		"                data:{\"q\":content},\n" +
+		"                success:function (r) {\n" +
+		"                    if(r && r.code==\"1\"){\n" +
+		"                        alert(\"删除成功！\");\n" +
+		"                    }else if(r && r.code==\"0\"){\n" +
+		"                        alert(r.error);\n" +
+		"                    }else{\n" +
+		"                        alert(\"未知错误\");\n" +
+		"                        console.log(r);\n" +
+		"                    }\n" +
+		"                },\n" +
+		"                error:function (e) {\n" +
+		"                    alert(\"未知错误\");\n" +
+		"                    console.log(e);\n" +
+		"                }\n" +
+		"            });\n" +
+		"        }\n" +
+		"    </script>\n" +
+		"</head>\n" +
+		"\n" +
+		"<body>\n" +
+		"\n" +
+		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
+		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n" +
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n" +
+		"</div>\n" +
+		"\n" +
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
+		"    <button onclick=\"del();\">删&nbsp;&nbsp;&nbsp;&nbsp;除</button>\n" +
 		"</div>\n" +
 		"\n" +
 		"</body>\n" +
