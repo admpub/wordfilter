@@ -19,9 +19,9 @@
                 success:function (r) {
                     if(r && r.code=="1"){
                         if(r.keywords && r.keywords.length > 0){
-                            r.keywords.forEach(function(obj){
-                                resultMsg.append(obj + "\r\n");
-                            })
+                            resultMsg.html(r.text);
+                        }else{
+                            alert("检查通过！");
                         }
                     }else if(r && r.code=="0"){
                         alert(r.error);
@@ -53,9 +53,11 @@
     <button onclick="check();">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>
 </div>
 
-<div id="result" style="width: 900px; margin-top: 30px; display: none;">
-    <label style="width: 90px; display: inline-block;">敏感内容：</label>
-    <textarea id="result-msg" style="vertical-align: top;" rows="20" cols="100"></textarea>
+<div id="result" style="width: 900px; margin-top: 30px; display: block;">
+    <div style="margin:0px 0px 20px 0px;">
+        <label style="">检查结果：</label>
+    </div>
+    <div id="result-msg" style=""></div>
 </div>
 
 </body>

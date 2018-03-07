@@ -57,66 +57,69 @@ func apiHelper(w http.ResponseWriter) {
 }
 
 func toIndex(w http.ResponseWriter) {
-	fmt.Fprintf(w, "<!DOCTYPE html>\n"+
-		"\n"+
-		"<html>\n"+
-		"<head>\n"+
-		"\t<title>首页</title>\n"+
-		"\t<script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n"+
-		"\t<script>\n"+
-		"\t\tfunction check(){\n"+
-		"\t\t    debugger;\n"+
-		"            var content = $(\"#content\").val();\n"+
-		"            $(\"#result\").show();\n"+
-		"            var resultMsg = $(\"#result-msg\");\n"+
-		"            $.ajax({\n"+
-		"                url:\"http://10.204.241.111:8088/v1/query\",\n"+
-		"                dataType:\"json\",\n"+
-		"                type:\"POST\",\n"+
-		"                data:{\"q\":content},\n"+
-		"                success:function (r) {\n"+
-		"\t\t\t\t\tif(r && r.code==\"1\"){\n"+
-		"\t\t\t\t\t\tif(r.keywords && r.keywords.length > 0){\n"+
-		"                            r.keywords.forEach(function(obj){\n"+
-		"                                resultMsg.append(obj + \"\\r\\n\");\n"+
-		"                            })\n"+
-		"                        }\n"+
-		"\t\t\t\t\t}else if(r && r.code==\"0\"){\n"+
-		"                        alert(r.error);\n"+
-		"                        resultMsg.html(\"\");\n"+
-		"                    }else{\n"+
-		"\t\t\t\t\t    alert(\"未知错误\");\n"+
-		"                        resultMsg.html(\"\");\n"+
-		"                        console.log(r);\n"+
-		"                    }\n"+
-		"                },\n"+
-		"\t\t\t\terror:function (e) {\n"+
-		"                    alert(\"未知错误\");\n"+
-		"                    resultMsg.html(\"\");\n"+
-		"                    console.log(e);\n"+
-		"                }\n"+
-		"            });\n"+
-		"\t\t}\n"+
-		"\t</script>\n"+
-		"</head>\n"+
-		"\n"+
-		"<body>\n"+
-		"\n"+
-		"<div style=\"width: 900px; margin-top: 20px;\">\n"+
-		"\t<label style=\"width: 90px; display: inline-block;\">内&nbsp;&nbsp;容&nbsp;&nbsp;&nbsp;&nbsp;：</label>\n"+
-		"\t<textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\"></textarea>\n"+
-		"</div>\n"+
-		"\n"+
-		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n"+
-		"\t<button onclick=\"check();\">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>\n"+
-		"</div>\n"+
-		"\n"+
-		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: none;\">\n"+
-		"\t<label style=\"width: 90px; display: inline-block;\">敏感内容：</label>\n"+
-		"\t<textarea id=\"result-msg\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\"></textarea>\n"+
-		"</div>\n"+
-		"\n"+
-		"</body>\n"+
+	fmt.Fprintf(w, "\n" +
+		"<!DOCTYPE html>\n" +
+		"\n" +
+		"<html>\n" +
+		"<head>\n" +
+		"    <title>首页</title>\n" +
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
+		"    <script>\n" +
+		"        function check(){\n" +
+		"            debugger;\n" +
+		"            var content = $(\"#content\").val();\n" +
+		"            $(\"#result\").show();\n" +
+		"            var resultMsg = $(\"#result-msg\");\n" +
+		"            $.ajax({\n" +
+		"                url:\"http://10.204.241.111:8088/v1/query\",\n" +
+		"                dataType:\"json\",\n" +
+		"                type:\"POST\",\n" +
+		"                data:{\"q\":content},\n" +
+		"                success:function (r) {\n" +
+		"                    if(r && r.code==\"1\"){\n" +
+		"                        if(r.keywords && r.keywords.length > 0){\n" +
+		"                            resultMsg.html(r.text);\n" +
+		"                        }else{\n" +
+		"                            alert(\"检查通过！\");\n" +
+		"                        }\n" +
+		"                    }else if(r && r.code==\"0\"){\n" +
+		"                        alert(r.error);\n" +
+		"                        resultMsg.html(\"\");\n" +
+		"                    }else{\n" +
+		"                        alert(\"未知错误\");\n" +
+		"                        resultMsg.html(\"\");\n" +
+		"                        console.log(r);\n" +
+		"                    }\n" +
+		"                },\n" +
+		"                error:function (e) {\n" +
+		"                    alert(\"未知错误\");\n" +
+		"                    resultMsg.html(\"\");\n" +
+		"                    console.log(e);\n" +
+		"                }\n" +
+		"            });\n" +
+		"        }\n" +
+		"    </script>\n" +
+		"</head>\n" +
+		"\n" +
+		"<body>\n" +
+		"\n" +
+		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
+		"    <label style=\"width: 90px; display: inline-block;\">内&nbsp;&nbsp;容&nbsp;&nbsp;&nbsp;&nbsp;：</label>\n" +
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\"></textarea>\n" +
+		"</div>\n" +
+		"\n" +
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
+		"    <button onclick=\"check();\">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>\n" +
+		"</div>\n" +
+		"\n" +
+		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: block;\">\n" +
+		"    <div style=\"margin:0px 0px 20px 0px;\">\n" +
+		"        <label style=\"\">检查结果：</label>\n" +
+		"    </div>\n" +
+		"    <div id=\"result-msg\" style=\"\"></div>\n" +
+		"</div>\n" +
+		"\n" +
+		"</body>\n" +
 		"</html>\n")
 }
 
