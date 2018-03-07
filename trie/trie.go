@@ -2,6 +2,7 @@ package trie
 
 import (
 	"sync"
+	"strings"
 )
 
 // Trie Tree
@@ -108,7 +109,7 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 	}
 
 	var (
-		i, j, jj int
+		i, j, jj , count, foundLen int
 		ok       bool
 	)
 
@@ -159,7 +160,12 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 		exist = true
 	}
 
-	return exist, found, string(chars)
+	foundLen = len(found)
+	for count=0; count < foundLen; count++ {
+		text = strings.Replace(text, found[count], "<span style='color:yellow;'>" + found[count] + "</span>", -1)
+	}
+
+	return exist, found, text
 }
 
 func (t *Trie) isInWhiteList(found []string, chars []rune, i, j, length int) (inWhiteList bool) {
@@ -210,15 +216,14 @@ func (t *Trie) isInWhiteSuffixList(found []string, chars []rune, i, j, length in
 	}
 	return
 }
-/*
-for k := i; k <= j; k++ {
-		chars[k] = 42 // *的rune为42
-	}
-*/
 // 替换为*号
 func (t *Trie) replaceToAsterisk(found []string, chars []rune, i, j int) []string {
 	tmpFound := chars[i : j+1]
-	found = append(found, "<span style='color:yellow;'>",string(tmpFound), "</span>")
+	found = append(found, string(tmpFound))
+
+	/*for k := i; k <= j; k++ {
+		chars[k] = 42 // *的rune为42
+	}*/
 
 	return found
 }
