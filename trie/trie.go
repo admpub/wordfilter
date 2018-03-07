@@ -166,7 +166,7 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 
 	foundTempLen = len(foundTemp)
 	for count=0; count < foundTempLen; count++ {
-		text = strings.Replace(text, foundTemp[count], "<span style='background:yellow;'>" + foundTemp[count] + "</span>", -1)
+		text = strings.Replace(text, foundTemp[count], "<span style='background:yellow;' contenteditable='true'>" + foundTemp[count] + "</span>", -1)
 	}
 
 	return exist, found, text
