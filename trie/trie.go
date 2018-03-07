@@ -210,14 +210,16 @@ func (t *Trie) isInWhiteSuffixList(found []string, chars []rune, i, j, length in
 	}
 	return
 }
-
+/*
+for k := i; k <= j; k++ {
+		chars[k] = 42 // *的rune为42
+	}
+*/
 // 替换为*号
 func (t *Trie) replaceToAsterisk(found []string, chars []rune, i, j int) []string {
 	tmpFound := chars[i : j+1]
-	found = append(found, string(tmpFound))
-	for k := i; k <= j; k++ {
-		chars[k] = 42 // *的rune为42
-	}
+	found = append(found, "<span style='color:yellow;'>",string(tmpFound), "</span>")
+
 	return found
 }
 
