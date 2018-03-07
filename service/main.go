@@ -80,6 +80,7 @@ func toIndex(w http.ResponseWriter) {
 		"                        if(r.keywords && r.keywords.length > 0){\n" +
 		"                            resultMsg.html(r.text);\n" +
 		"                        }else{\n" +
+		"                            resultMsg.html(\"\");\n" +
 		"                            alert(\"检查通过！\");\n" +
 		"                        }\n" +
 		"                    }else if(r && r.code==\"0\"){\n" +
