@@ -3,6 +3,7 @@ package trie
 import (
 	"sync"
 	"strings"
+	"sort"
 )
 
 // Trie Tree
@@ -109,7 +110,7 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 	}
 
 	var (
-		i, j, jj , count, foundLen int
+		i, j, jj , count, foundTempLen int
 		ok       bool
 	)
 
@@ -160,12 +161,26 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 		exist = true
 	}
 
-	foundLen = len(found)
-	for count=0; count < foundLen; count++ {
-		text = strings.Replace(text, found[count], "<span style='color:yellow;'>" + found[count] + "</span>", -1)
+	sort.Strings(found)
+	foundTemp := removeDuplicatesAndEmpty(found)
+
+	foundTempLen = len(foundTemp)
+	for count=0; count < foundTempLen; count++ {
+		text = strings.Replace(text, foundTemp[count], "<span style='color:yellow;'>" + foundTemp[count] + "</span>", -1)
 	}
 
 	return exist, found, text
+}
+
+func removeDuplicatesAndEmpty(a []string) (ret []string){
+	aLen := len(a)
+	for i:=0; i < aLen; i++{
+		if (i > 0 && a[i-1] == a[i]) || len(a[i])==0{
+			continue
+		}
+		ret = append(ret, a[i])
+	}
+	return
 }
 
 func (t *Trie) isInWhiteList(found []string, chars []rune, i, j, length int) (inWhiteList bool) {
