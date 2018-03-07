@@ -10,8 +10,9 @@
             $.ajax({
                 url:"http://10.204.241.111:8088/v1/black_words",
                 dataType:"json",
+                contentType:"application/json",
                 type:"DELETE",
-                data:{"q":content},
+                data:JSON.stringify({"q":content}),
                 success:function (r) {
                     if(r && r.code=="1"){
                         alert("删除成功！");

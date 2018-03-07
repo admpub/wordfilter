@@ -188,8 +188,9 @@ func toDelete(w http.ResponseWriter) {
 		"            $.ajax({\n" +
 		"                url:\"http://10.204.241.111:8088/v1/black_words\",\n" +
 		"                dataType:\"json\",\n" +
+		"                contentType:\"application/json\",\n" +
 		"                type:\"DELETE\",\n" +
-		"                data:{\"q\":content},\n" +
+		"                data:JSON.stringify({\"q\":content}),\n" +
 		"                success:function (r) {\n" +
 		"                    if(r && r.code==\"1\"){\n" +
 		"                        alert(\"删除成功！\");\n" +
