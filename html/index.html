@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>首页</title>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        function check(){
+            debugger;
+            var content = $("#content").val();
+            $("#result").show();
+            var resultMsg = $("#result-msg");
+            $.ajax({
+                url:"http://10.204.241.111:8088/v1/query",
+                dataType:"json",
+                type:"POST",
+                data:{"q":content},
+                success:function (r) {
+                    if(r && r.code=="1"){
+                        if(r.keywords && r.keywords.length > 0){
+                            r.keywords.forEach(function(obj){
+                                resultMsg.append(obj + "\r\n");
+                            })
+                        }
+                    }else if(r && r.code=="0"){
+                        alert(r.error);
+                        resultMsg.html("");
+                    }else{
+                        alert("未知错误");
+                        resultMsg.html("");
+                        console.log(r);
+                    }
+                },
+                error:function (e) {
+                    alert("未知错误");
+                    resultMsg.html("");
+                    console.log(e);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+<div style="width: 900px; margin-top: 20px;">
+    <label style="width: 90px; display: inline-block;">内&nbsp;&nbsp;容&nbsp;&nbsp;&nbsp;&nbsp;：</label>
+    <textarea id="content" style="vertical-align: top;" rows="20" cols="100"></textarea>
+</div>
+
+<div style="width: 800px; text-align: center; margin-top: 30px;">
+    <button onclick="check();">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>
+</div>
+
+<div id="result" style="width: 900px; margin-top: 30px; display: none;">
+    <label style="width: 90px; display: inline-block;">敏感内容：</label>
+    <textarea id="result-msg" style="vertical-align: top;" rows="20" cols="100"></textarea>
+</div>
+
+</body>
+</html>
