@@ -73,7 +73,7 @@ func toIndex(w http.ResponseWriter) {
 		"            $(\"#result\").show();\n" +
 		"            var resultMsg = $(\"#result-msg\");\n" +
 		"            $.ajax({\n" +
-		"                url:\"http://10.204.241.111:8088/v1/query\",\n" +
+		"                url:\"http://10.204.8.173:9090/v1/query\",\n" +
 		"                dataType:\"json\",\n" +
 		"                type:\"POST\",\n" +
 		"                data:{\"q\":content},\n" +
@@ -137,7 +137,7 @@ func toAdd(w http.ResponseWriter) {
 		"        function add(){\n" +
 		"            var content = $(\"#content\").val();\n" +
 		"            $.ajax({\n" +
-		"                url:\"http://10.204.241.111:8088/v1/black_words\",\n" +
+		"                url:\"http://10.204.8.173:9090/v1/black_words\",\n" +
 		"                dataType:\"json\",\n" +
 		"                type:\"POST\",\n" +
 		"                data:{\"q\":content},\n" +
@@ -186,7 +186,7 @@ func toDelete(w http.ResponseWriter) {
 		"        function del(){\n" +
 		"            var content = $(\"#content\").val();\n" +
 		"            $.ajax({\n" +
-		"                url:\"http://10.204.241.111:8088/v1/black_words\",\n" +
+		"                url:\"http://10.204.8.173:9090/v1/black_words\",\n" +
 		"                dataType:\"json\",\n" +
 		"                contentType:\"application/json\",\n" +
 		"                type:\"DELETE\",\n" +
@@ -428,7 +428,7 @@ func serveJSON(w http.ResponseWriter, data interface{}) {
 }
 
 func main() {
-	ipAddr := ":8080"
+	ipAddr := ":9090"
 	if len(os.Args) > 1 {
 		ipAddr = os.Args[1]
 	}
