@@ -123,10 +123,10 @@ func (r *Resultset) HTML() template.HTML {
 	for j := len(words) - 1; j >= 0; j-- {
 		word := words[j]
 		highlight[j] = r.highlight(word)
-		text = strings.Replace(text, word, `{`+strconv.Itoa(j)+`}`, -1)
+		text = strings.Replace(text, word, `<{`+strconv.Itoa(j)+`}>`, -1)
 	}
 	for j, v := range highlight {
-		text = strings.Replace(text, `{`+strconv.Itoa(j)+`}`, v, -1)
+		text = strings.Replace(text, `<{`+strconv.Itoa(j)+`}>`, v, -1)
 	}
 	return template.HTML(text)
 }
