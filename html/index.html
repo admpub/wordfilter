@@ -10,7 +10,7 @@
             $("#result").show();
             var resultMsg = $("#result-msg");
             $.ajax({
-                url:"http://10.204.8.173:9090/v1/query",
+                url:"/v1/query",
                 dataType:"json",
                 type:"POST",
                 data:{"q":content},

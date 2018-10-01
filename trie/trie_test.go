@@ -44,7 +44,6 @@ func TestDel(t *testing.T) {
 
 	text := "AV AV演员 AV演员色情"
 	expect := ""
-	got := ""
 
 	printTrie(trie.Root, t, " |")
 	t.Log("-----------------------")
@@ -52,44 +51,49 @@ func TestDel(t *testing.T) {
 	//删除开头的
 	expect = "AV **** ******"
 	trie.Del("AV")
-	_, _, got = trie.Query(text)
+	r := trie.Query(text)
 
-	if got != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, got)
+	t.Log("words:", r.DirtyWords)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
+	}
+	expect = `AV <span style='background:yellow;' contenteditable='true'>AV演员</span> <span style='background:yellow;' contenteditable='true'>AV演员色情</span>`
+	if string(r.HTML()) != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.HTML())
 	}
 	trie.Add("AV")
 
 	// 删除中间的
 	trie.Del("AV演员")
 	expect = "** **演员 ******"
-	_, _, got = trie.Query(text)
-	if got != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, got)
+	r = trie.Query(text)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
 	}
 	trie.Add("AV演员")
 
 	// 删除后面的
 	trie.Del("AV演员色情")
 	expect = "** **** ****色情"
-	_, _, got = trie.Query(text)
-	if got != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, got)
+	r = trie.Query(text)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
 	}
 	trie.Add("AV演员色情")
 
 	//删除不存在的敏感词
 	trie.Del("VA演")
 	expect = "** **** ******"
-	_, _, got = trie.Query(text)
-	if got != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, got)
+	r = trie.Query(text)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
 	}
 
 	trie.Del("AV演员色情表演")
 	expect = "** **** ******"
-	_, _, got = trie.Query(text)
-	if got != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, got)
+	r = trie.Query(text)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
 	}
 }
 
@@ -132,36 +136,36 @@ func TestQuery(t *testing.T) {
 	text := "日本AV演员兼电视、电影演员。苍井空AV女优是xx出道, 日本AV女优们最精彩的表演是AV演员色情表演"
 	expect := "日本****兼电视、电影演员。苍井空**女优是xx出道, ******们最精彩的表演是******表演"
 
-	ok, words, newText := trie.Query(text)
+	r := trie.Query(text)
 
-	t.Log("words:", words)
-	t.Log("text:", newText)
+	t.Log("words:", r.DirtyWords)
+	t.Log("text:", r.String())
 
-	if !ok {
+	if !r.Exist {
 		t.Error("替换失败 1")
 	}
 
-	if len(words) == 0 {
+	if len(r.DirtyWords) == 0 {
 		t.Error("替换失败 2")
 	}
 
-	if newText != expect {
-		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, newText)
+	if r.String() != expect {
+		t.Errorf("希望得到: %s\n实际得到: %s\n", expect, r.String())
 	}
 
 	// 和谐的文本
 	text = "完全和谐的文本完全和谐的文本"
-	ok, words, newText = trie.Query(text)
+	r = trie.Query(text)
 
-	if ok {
+	if r.Exist {
 		t.Error("替换失败")
 	}
 
-	if len(words) != 0 {
+	if len(r.DirtyWords) != 0 {
 		t.Error("替换失败 2")
 	}
 
-	if newText != text {
+	if r.String() != text {
 		t.Error("替换失败 3")
 	}
 }
@@ -176,12 +180,12 @@ func TestQuery2(t *testing.T) {
 
 	text := "XX路口交"
 
-	ok, words, newText := trie.Query(text)
+	r := trie.Query(text)
 
-	t.Log("words:", words)
-	t.Log("text:", newText)
+	t.Log("words:", r.DirtyWords)
+	t.Log("text:", r.String())
 
-	if !ok {
+	if !r.Exist {
 		t.Error("替换失败")
 	}
 }
@@ -190,17 +194,17 @@ func TestReplaceNilTrie(t *testing.T) {
 	trie := NewTrie()
 	// 和谐的文本
 	text := "完全和谐的文本完全和谐的文本"
-	ok, words, newText := trie.Query(text)
+	r := trie.Query(text)
 
-	if ok {
+	if r.Exist {
 		t.Error("替换失败")
 	}
 
-	if len(words) != 0 {
+	if len(r.DirtyWords) != 0 {
 		t.Error("替换失败 2")
 	}
 
-	if newText != text {
+	if r.String() != text {
 		t.Error("替换失败 3")
 	}
 }

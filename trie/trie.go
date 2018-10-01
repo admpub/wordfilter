@@ -1,9 +1,11 @@
 package trie
 
 import (
-	"sync"
-	"strings"
+	"html/template"
 	"sort"
+	"strconv"
+	"strings"
+	"sync"
 )
 
 // Trie Tree
@@ -98,19 +100,51 @@ func (t *Trie) cycleDel(node *Node, chars []rune, index int) (shouldDel bool) {
 	return
 }
 
+type Resultset struct {
+	Raw        string
+	Exist      bool
+	DirtyWords []string
+	Text       string
+}
+
+func (r *Resultset) String() string {
+	return r.Text
+}
+
+func (r *Resultset) highlight(keywords string) string {
+	return "<span style='background:yellow;' contenteditable='true'>" + keywords + "</span>"
+}
+
+func (r *Resultset) HTML() template.HTML {
+	text := r.Raw
+	words := r.DirtyWords
+	//words = removeDuplicatesAndEmpty(words)
+	highlight := make([]string, len(words))
+	for j := len(words) - 1; j >= 0; j-- {
+		word := words[j]
+		highlight[j] = r.highlight(word)
+		text = strings.Replace(text, word, `{`+strconv.Itoa(j)+`}`, -1)
+	}
+	for j, v := range highlight {
+		text = strings.Replace(text, `{`+strconv.Itoa(j)+`}`, v, -1)
+	}
+	return template.HTML(text)
+}
+
 // Query 查询敏感词
 // 将text中在trie里的敏感字，替换为*号
 // 返回结果: 是否有敏感字, 敏感字数组, 替换后的文本
-func (t *Trie) Query(text string) (bool, []string, string) {
+func (t *Trie) Query(text string) *Resultset {
 	found := []string{}
 	chars := []rune(text)
 	l := len(chars)
+	r := &Resultset{Raw: text, Text: text}
 	if l == 0 {
-		return false, found, text
+		return r
 	}
 
 	var (
-		i, j, jj , count, foundTempLen int
+		i, j, jj int
 		ok       bool
 	)
 
@@ -156,26 +190,20 @@ func (t *Trie) Query(text string) (bool, []string, string) {
 		node = t.Root
 	}
 
-	exist := false
 	if len(found) > 0 {
-		exist = true
+		r.Exist = true
 	}
 
 	sort.Strings(found)
-	foundTemp := removeDuplicatesAndEmpty(found)
-
-	foundTempLen = len(foundTemp)
-	for count=0; count < foundTempLen; count++ {
-		text = strings.Replace(text, foundTemp[count], "<span style='background:yellow;' contenteditable='true'>" + foundTemp[count] + "</span>", -1)
-	}
-
-	return exist, found, text
+	r.DirtyWords = found
+	r.Text = string(chars)
+	return r
 }
 
-func removeDuplicatesAndEmpty(a []string) (ret []string){
+func removeDuplicatesAndEmpty(a []string) (ret []string) {
 	aLen := len(a)
-	for i:=0; i < aLen; i++{
-		if (i > 0 && a[i-1] == a[i]) || len(a[i])==0{
+	for i := 0; i < aLen; i++ {
+		if (i > 0 && a[i-1] == a[i]) || len(a[i]) == 0 {
 			continue
 		}
 		ret = append(ret, a[i])
@@ -201,9 +229,9 @@ func (t *Trie) isInWhitePreffixList(found []string, chars []rune, i, j, length i
 		prefixPos = 0
 	}
 	prefixWords := string(chars[prefixPos : i+1])
-	exist, _, respChars := WhitePrefixTrie().Query(prefixWords)
-	if exist {
-		tmp := []rune(respChars)
+	r := WhitePrefixTrie().Query(prefixWords)
+	if r.Exist {
+		tmp := []rune(r.String())
 		if tmp[len(tmp)-1] == 42 {
 			inWhiteList = true
 		}
@@ -222,23 +250,24 @@ func (t *Trie) isInWhiteSuffixList(found []string, chars []rune, i, j, length in
 		suffixPos = length
 	}
 	suffixWords := string(chars[j:suffixPos])
-	exist, _, respChars := WhiteSuffixTrie().Query(suffixWords)
-	if exist {
-		tmp := []rune(respChars)
+	r := WhiteSuffixTrie().Query(suffixWords)
+	if r.Exist {
+		tmp := []rune(r.String())
 		if tmp[0] == 42 {
 			inWhiteList = true
 		}
 	}
 	return
 }
+
 // 替换为*号
 func (t *Trie) replaceToAsterisk(found []string, chars []rune, i, j int) []string {
 	tmpFound := chars[i : j+1]
 	found = append(found, string(tmpFound))
 
-	/*for k := i; k <= j; k++ {
+	for k := i; k <= j; k++ {
 		chars[k] = 42 // *的rune为42
-	}*/
+	}
 
 	return found
 }

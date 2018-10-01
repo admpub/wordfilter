@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/wjwei/wordfilter/trie"
+	"github.com/admpub/wordfilter/trie"
 )
 
 type router struct {
@@ -61,167 +61,167 @@ func apiHelper(w http.ResponseWriter) {
 }
 
 func toIndex(w http.ResponseWriter) {
-	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
-		"\n" +
-		"<html>\n" +
-		"<head>\n" +
-		"    <title>首页</title>\n" +
-		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
-		"    <script>\n" +
-		"        function check(){\n" +
-		"            var content = $(\"#content\").val();\n" +
-		"            $(\"#result\").show();\n" +
-		"            var resultMsg = $(\"#result-msg\");\n" +
-		"            $.ajax({\n" +
-		"                url:\"http://10.204.8.173:9090/v1/query\",\n" +
-		"                dataType:\"json\",\n" +
-		"                type:\"POST\",\n" +
-		"                data:{\"q\":content},\n" +
-		"                success:function (r) {\n" +
-		"                    if(r && r.code==\"1\"){\n" +
-		"                        if(r.keywords && r.keywords.length > 0){\n" +
-		"                            resultMsg.html(r.text);\n" +
-		"                        }else{\n" +
-		"                            resultMsg.html(\"\");\n" +
-		"                            alert(\"检查通过！\");\n" +
-		"                        }\n" +
-		"                    }else if(r && r.code==\"0\"){\n" +
-		"                        alert(r.error);\n" +
-		"                        resultMsg.html(\"\");\n" +
-		"                    }else{\n" +
-		"                        alert(\"未知错误\");\n" +
-		"                        resultMsg.html(\"\");\n" +
-		"                        console.log(r);\n" +
-		"                    }\n" +
-		"                },\n" +
-		"                error:function (e) {\n" +
-		"                    alert(\"未知错误\");\n" +
-		"                    resultMsg.html(\"\");\n" +
-		"                    console.log(e);\n" +
-		"                }\n" +
-		"            });\n" +
-		"        }\n" +
-		"    </script>\n" +
-		"</head>\n" +
-		"\n" +
-		"<body>\n" +
-		"\n" +
-		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
-		"    <label style=\"width: 90px; display: inline-block;\">内&nbsp;&nbsp;容&nbsp;&nbsp;&nbsp;&nbsp;：</label>\n" +
-		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\"></textarea>\n" +
-		"</div>\n" +
-		"\n" +
-		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
-		"    <button onclick=\"check();\">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>\n" +
-		"</div>\n" +
-		"\n" +
-		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: none;\">\n" +
-		"    <div style=\"margin:0px 0px 20px 0px;\">\n" +
-		"        <label style=\"\">检查结果：</label>\n" +
-		"    </div>\n" +
-		"    <div id=\"result-msg\" style=\"\"></div>\n" +
-		"</div>\n" +
-		"\n" +
-		"</body>\n" +
+	fmt.Fprintf(w, "<!DOCTYPE html>\n"+
+		"\n"+
+		"<html>\n"+
+		"<head>\n"+
+		"    <title>首页</title>\n"+
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n"+
+		"    <script>\n"+
+		"        function check(){\n"+
+		"            var content = $(\"#content\").val();\n"+
+		"            $(\"#result\").show();\n"+
+		"            var resultMsg = $(\"#result-msg\");\n"+
+		"            $.ajax({\n"+
+		"                url:\"/v1/query\",\n"+
+		"                dataType:\"json\",\n"+
+		"                type:\"POST\",\n"+
+		"                data:{\"q\":content},\n"+
+		"                success:function (r) {\n"+
+		"                    if(r && r.code==\"1\"){\n"+
+		"                        if(r.keywords && r.keywords.length > 0){\n"+
+		"                            resultMsg.html(r.html);\n"+
+		"                        }else{\n"+
+		"                            resultMsg.html(\"\");\n"+
+		"                            alert(\"检查通过！\");\n"+
+		"                        }\n"+
+		"                    }else if(r && r.code==\"0\"){\n"+
+		"                        alert(r.error);\n"+
+		"                        resultMsg.html(\"\");\n"+
+		"                    }else{\n"+
+		"                        alert(\"未知错误\");\n"+
+		"                        resultMsg.html(\"\");\n"+
+		"                        console.log(r);\n"+
+		"                    }\n"+
+		"                },\n"+
+		"                error:function (e) {\n"+
+		"                    alert(\"未知错误\");\n"+
+		"                    resultMsg.html(\"\");\n"+
+		"                    console.log(e);\n"+
+		"                }\n"+
+		"            });\n"+
+		"        }\n"+
+		"    </script>\n"+
+		"</head>\n"+
+		"\n"+
+		"<body>\n"+
+		"\n"+
+		"<div style=\"width: 900px; margin-top: 20px;\">\n"+
+		"    <label style=\"width: 90px; display: inline-block;\">内&nbsp;&nbsp;容&nbsp;&nbsp;&nbsp;&nbsp;：</label>\n"+
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\"></textarea>\n"+
+		"</div>\n"+
+		"\n"+
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n"+
+		"    <button onclick=\"check();\">检&nbsp;&nbsp;&nbsp;&nbsp;验</button>\n"+
+		"</div>\n"+
+		"\n"+
+		"<div id=\"result\" style=\"width: 900px; margin-top: 30px; display: none;\">\n"+
+		"    <div style=\"margin:0px 0px 20px 0px;\">\n"+
+		"        <label style=\"\">检查结果：</label>\n"+
+		"    </div>\n"+
+		"    <div id=\"result-msg\" style=\"\"></div>\n"+
+		"</div>\n"+
+		"\n"+
+		"</body>\n"+
 		"</html>\n")
 }
 
 func toAdd(w http.ResponseWriter) {
-	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
-		"\n" +
-		"<html>\n" +
-		"<head>\n" +
-		"    <title>添加敏感词</title>\n" +
-		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
-		"    <script>\n" +
-		"        function add(){\n" +
-		"            var content = $(\"#content\").val();\n" +
-		"            $.ajax({\n" +
-		"                url:\"http://10.204.8.173:9090/v1/black_words\",\n" +
-		"                dataType:\"json\",\n" +
-		"                type:\"POST\",\n" +
-		"                data:{\"q\":content},\n" +
-		"                success:function (r) {\n" +
-		"                    if(r && r.code==\"1\"){\n" +
-		"                        alert(\"添加成功！\");\n" +
-		"                    }else if(r && r.code==\"0\"){\n" +
-		"                        alert(r.error);\n" +
-		"                    }else{\n" +
-		"                        alert(\"未知错误\");\n" +
-		"                        console.log(r);\n" +
-		"                    }\n" +
-		"                },\n" +
-		"                error:function (e) {\n" +
-		"                    alert(\"未知错误\");\n" +
-		"                    console.log(e);\n" +
-		"                }\n" +
-		"            });\n" +
-		"        }\n" +
-		"    </script>\n" +
-		"</head>\n" +
-		"\n" +
-		"<body>\n" +
-		"\n" +
-		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
-		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n" +
-		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n" +
-		"</div>\n" +
-		"\n" +
-		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
-		"    <button onclick=\"add();\">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>\n" +
-		"</div>\n" +
-		"\n" +
-		"</body>\n" +
+	fmt.Fprintf(w, "<!DOCTYPE html>\n"+
+		"\n"+
+		"<html>\n"+
+		"<head>\n"+
+		"    <title>添加敏感词</title>\n"+
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n"+
+		"    <script>\n"+
+		"        function add(){\n"+
+		"            var content = $(\"#content\").val();\n"+
+		"            $.ajax({\n"+
+		"                url:\"/v1/black_words\",\n"+
+		"                dataType:\"json\",\n"+
+		"                type:\"POST\",\n"+
+		"                data:{\"q\":content},\n"+
+		"                success:function (r) {\n"+
+		"                    if(r && r.code==\"1\"){\n"+
+		"                        alert(\"添加成功！\");\n"+
+		"                    }else if(r && r.code==\"0\"){\n"+
+		"                        alert(r.error);\n"+
+		"                    }else{\n"+
+		"                        alert(\"未知错误\");\n"+
+		"                        console.log(r);\n"+
+		"                    }\n"+
+		"                },\n"+
+		"                error:function (e) {\n"+
+		"                    alert(\"未知错误\");\n"+
+		"                    console.log(e);\n"+
+		"                }\n"+
+		"            });\n"+
+		"        }\n"+
+		"    </script>\n"+
+		"</head>\n"+
+		"\n"+
+		"<body>\n"+
+		"\n"+
+		"<div style=\"width: 900px; margin-top: 20px;\">\n"+
+		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n"+
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n"+
+		"</div>\n"+
+		"\n"+
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n"+
+		"    <button onclick=\"add();\">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>\n"+
+		"</div>\n"+
+		"\n"+
+		"</body>\n"+
 		"</html>\n")
 }
 
 func toDelete(w http.ResponseWriter) {
-	fmt.Fprintf(w, "<!DOCTYPE html>\n" +
-		"\n" +
-		"<html>\n" +
-		"<head>\n" +
-		"    <title>添加敏感词</title>\n" +
-		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n" +
-		"    <script>\n" +
-		"        function del(){\n" +
-		"            var content = $(\"#content\").val();\n" +
-		"            $.ajax({\n" +
-		"                url:\"http://10.204.8.173:9090/v1/black_words\",\n" +
-		"                dataType:\"json\",\n" +
-		"                contentType:\"application/json\",\n" +
-		"                type:\"DELETE\",\n" +
-		"                data:JSON.stringify({\"q\":content}),\n" +
-		"                success:function (r) {\n" +
-		"                    if(r && r.code==\"1\"){\n" +
-		"                        alert(\"删除成功！\");\n" +
-		"                    }else if(r && r.code==\"0\"){\n" +
-		"                        alert(r.error);\n" +
-		"                    }else{\n" +
-		"                        alert(\"未知错误\");\n" +
-		"                        console.log(r);\n" +
-		"                    }\n" +
-		"                },\n" +
-		"                error:function (e) {\n" +
-		"                    alert(\"未知错误\");\n" +
-		"                    console.log(e);\n" +
-		"                }\n" +
-		"            });\n" +
-		"        }\n" +
-		"    </script>\n" +
-		"</head>\n" +
-		"\n" +
-		"<body>\n" +
-		"\n" +
-		"<div style=\"width: 900px; margin-top: 20px;\">\n" +
-		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n" +
-		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n" +
-		"</div>\n" +
-		"\n" +
-		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n" +
-		"    <button onclick=\"del();\">删&nbsp;&nbsp;&nbsp;&nbsp;除</button>\n" +
-		"</div>\n" +
-		"\n" +
-		"</body>\n" +
+	fmt.Fprintf(w, "<!DOCTYPE html>\n"+
+		"\n"+
+		"<html>\n"+
+		"<head>\n"+
+		"    <title>添加敏感词</title>\n"+
+		"    <script src=\"http://libs.baidu.com/jquery/1.9.1/jquery.min.js\"></script>\n"+
+		"    <script>\n"+
+		"        function del(){\n"+
+		"            var content = $(\"#content\").val();\n"+
+		"            $.ajax({\n"+
+		"                url:\"/v1/black_words\",\n"+
+		"                dataType:\"json\",\n"+
+		"                contentType:\"application/json\",\n"+
+		"                type:\"DELETE\",\n"+
+		"                data:JSON.stringify({\"q\":content}),\n"+
+		"                success:function (r) {\n"+
+		"                    if(r && r.code==\"1\"){\n"+
+		"                        alert(\"删除成功！\");\n"+
+		"                    }else if(r && r.code==\"0\"){\n"+
+		"                        alert(r.error);\n"+
+		"                    }else{\n"+
+		"                        alert(\"未知错误\");\n"+
+		"                        console.log(r);\n"+
+		"                    }\n"+
+		"                },\n"+
+		"                error:function (e) {\n"+
+		"                    alert(\"未知错误\");\n"+
+		"                    console.log(e);\n"+
+		"                }\n"+
+		"            });\n"+
+		"        }\n"+
+		"    </script>\n"+
+		"</head>\n"+
+		"\n"+
+		"<body>\n"+
+		"\n"+
+		"<div style=\"width: 900px; margin-top: 20px;\">\n"+
+		"    <label style=\"width: 90px; display: inline-block;\">敏&nbsp;&nbsp;感&nbsp;&nbsp;词&nbsp;&nbsp;：</label>\n"+
+		"    <textarea id=\"content\" style=\"vertical-align: top;\" rows=\"20\" cols=\"100\" placeholder=\"多个使用英文逗号隔开\"></textarea>\n"+
+		"</div>\n"+
+		"\n"+
+		"<div style=\"width: 800px; text-align: center; margin-top: 30px;\">\n"+
+		"    <button onclick=\"del();\">删&nbsp;&nbsp;&nbsp;&nbsp;除</button>\n"+
+		"</div>\n"+
+		"\n"+
+		"</body>\n"+
 		"</html>\n")
 }
 
@@ -233,6 +233,7 @@ func queryWords(w http.ResponseWriter, r *http.Request) {
 		Error    string   `json:"error,omitempty"`
 		Keywords []string `json:"keywords,omitempty"`
 		Text     string   `json:"text,omitempty"`
+		HTML     string   `json:"html,omitempty"`
 	}
 
 	text := ""
@@ -256,10 +257,11 @@ func queryWords(w http.ResponseWriter, r *http.Request) {
 
 	if text != "" {
 		res.Code = 1
-		ok, keyword, newText := trie.BlackTrie().Query(text)
-		if ok {
-			res.Keywords = keyword
-			res.Text = newText
+		r := trie.BlackTrie().Query(text)
+		if r.Exist {
+			res.Keywords = r.DirtyWords
+			res.Text = r.Text
+			res.HTML = string(r.HTML())
 		}
 	} else {
 		res.Code = 0

@@ -8,7 +8,7 @@
         function add(){
             var content = $("#content").val();
             $.ajax({
-                url:"http://10.204.8.173:9090/v1/black_words",
+                url:"/v1/black_words",
                 dataType:"json",
                 type:"POST",
                 data:{"q":content},
